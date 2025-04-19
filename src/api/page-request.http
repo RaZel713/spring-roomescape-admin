@@ -1,0 +1,17 @@
+### welcome 페이지
+
+GET http://localhost:8080
+
+###
+
+### 어드민 메인 페이지
+
+GET http://localhost:8080/admin
+
+###
+
+### 예약 관리 페이지
+
+GET http://localhost:8080/admin/reservation
+
+###
