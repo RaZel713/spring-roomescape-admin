@@ -1,6 +1,7 @@
 package roomescape.reservation;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -36,7 +37,7 @@ public class ReservationController {
         try {
             reservations.removeReservation(id);
             return ResponseEntity.ok().build();
-        } catch (final IllegalArgumentException e) {
+        } catch (final NoSuchElementException e) {
             return ResponseEntity.notFound().build();
         }
     }

@@ -2,6 +2,7 @@ package roomescape.reservation;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -27,7 +28,7 @@ public class Reservations {
         return reservations.stream()
                 .filter(reservation -> Objects.equals(reservation.id(), id))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("[ERROR]"));
+                .orElseThrow(() -> new NoSuchElementException("[ERROR] 해당 ID의 예약을 찾을 수 없습니다. id:" + id));
     }
 
     public synchronized List<Reservation> getReservations() {
