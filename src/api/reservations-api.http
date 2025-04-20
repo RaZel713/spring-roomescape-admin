@@ -1,0 +1,24 @@
+### Create Reservation API
+
+POST http://localhost:8080/reservations HTTP/1.1
+content-type: application/json
+
+{
+  "date": "2023-08-05",
+  "name": "브라운",
+  "time": "15:40"
+}
+
+###
+
+### Read All Reservation API
+
+GET http://localhost:8080/reservations HTTP/1.1
+
+###
+
+### Delete Reservation API
+
+DELETE http://localhost:8080/reservations/1 HTTP/1.1
+
+###
