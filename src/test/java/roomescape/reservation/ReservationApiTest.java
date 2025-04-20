@@ -4,9 +4,7 @@ import static org.hamcrest.Matchers.is;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
-import java.util.HashMap;
 import java.util.Map;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,14 +14,11 @@ import org.springframework.test.annotation.DirtiesContext;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class ReservationApiTest {
 
-    private static final Map<String, String> RESERVATION_BODY = new HashMap<>();
-
-    @BeforeAll
-    static void initParams() {
-        RESERVATION_BODY.put("name", "브라운");
-        RESERVATION_BODY.put("date", "2023-08-05");
-        RESERVATION_BODY.put("time", "15:40");
-    }
+    private static final Map<String, String> RESERVATION_BODY = Map.of(
+            "name", "브라운",
+            "date", "2023-08-05",
+            "time", "15:40"
+    );
 
     @DisplayName("예약을 생성하고, 200 OK를 응답")
     @Test
