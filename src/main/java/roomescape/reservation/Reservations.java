@@ -10,14 +10,14 @@ public class Reservations {
     private final AtomicLong nextId = new AtomicLong(1);
     private final List<Reservation> reservations = new ArrayList<>();
 
-    public Reservation save(final Reservation reservation) {
+    public synchronized Reservation save(final Reservation reservation) {
         final Reservation reservationWithId = reservation.writeId(nextId.getAndIncrement());
         reservations.add(reservationWithId);
 
         return reservationWithId;
     }
 
-    public void removeReservation(final long id) {
+    public synchronized void removeReservation(final long id) {
         final Reservation target = findBy(id);
 
         reservations.remove(target);
@@ -30,7 +30,7 @@ public class Reservations {
                 .orElseThrow(() -> new IllegalArgumentException("[ERROR]"));
     }
 
-    public List<Reservation> getReservations() {
+    public synchronized List<Reservation> getReservations() {
         return new ArrayList<>(reservations);
     }
 }
