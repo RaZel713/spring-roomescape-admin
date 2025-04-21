@@ -33,7 +33,7 @@
 - [x] 데이터베이스 테이블 생성을 위해 `resources/schema.sql` 파일을 생성하고 예약 테이블을 생성하는 쿼리를 작성한다.
 - [x] h2 데이터베이스의 console 기능을 활성화하고, datasource url을 `jdbc:h2:mem:database`로 지정한다.
 
-- [ ] 테스트) JdbcTemplate을 이용하여 DataSource객체에 접근하기
-- [ ] 테스트) DataSource 객체를 이용하여 Connection 확인하기
-- [ ] 테스트) Connection 객체를 이용하여 데이터베이스 이름 검증
-- [ ] 테스트) Connection 객체를 이용하여 테이블 이름 검증
+- [x] 테스트) JdbcTemplate을 이용하여 DataSource객체에 접근하기
+- [x] 테스트) DataSource 객체를 이용하여 Connection 확인하기
+- [x] 테스트) Connection 객체를 이용하여 데이터베이스 이름 검증
+- [x] 테스트) Connection 객체를 이용하여 테이블 이름 검증
