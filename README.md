@@ -29,7 +29,7 @@
 
 ## 🚀 4단계 - 데이터베이스 적용하기
 
-- [ ] build.gradle 파일을 이용하여 `spring-boot-stater-jdbc`, `h2` 두 의존성을 추가한다.
+- [x] build.gradle 파일을 이용하여 `spring-boot-stater-jdbc`, `h2` 두 의존성을 추가한다.
 - [ ] 데이터베이스 테이블 생성을 위해 `resources/schema.sql` 파일을 생성하고 예약 테이블을 생성하는 쿼리를 작성한다.
 - [ ] h2 데이터베이스의 console 기능을 활성화하고, datasource url을 `jdbc:h2:mem:database`로 지정한다.
 
