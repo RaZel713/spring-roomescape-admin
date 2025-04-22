@@ -14,28 +14,21 @@ public class Reservations {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-//    private final AtomicLong nextId = new AtomicLong(1);
-//    private final List<Reservation> reservations = new ArrayList<>();
+    public synchronized void insert(final Reservation reservation) {
+        // 예약을 데이터 베이스에 저장하기
+        String sql = "INSERT INTO reservation (name, date, time) VALUES (?, ?, ?)";
+        jdbcTemplate.update(
+                sql,
+                reservation.name(),
+                reservation.date(),
+                reservation.time());
+    }
 
-//    public synchronized Reservation save(final Reservation reservation) {
-//        final Reservation reservationWithId = reservation.writeId(nextId.getAndIncrement());
-//        reservations.add(reservationWithId);
-//
-//        return reservationWithId;
-//    }
-//
-//    public synchronized void removeReservation(final long id) {
-//        final Reservation target = findBy(id);
-//
-//        reservations.remove(target);
-//    }
-//
-//    private Reservation findBy(long id) {
-//        return reservations.stream()
-//                .filter(reservation -> Objects.equals(reservation.id(), id))
-//                .findFirst()
-//                .orElseThrow(() -> new NoSuchElementException("[ERROR] 해당 ID의 예약을 찾을 수 없습니다. id:" + id));
-//    }
+    public synchronized int delete(final long id) {
+        // id에 해당하는 reservation을 지우고, 해당 쿼리에 영향받는 row 수 반환
+        String sql = "DELETE FROM reservation where id = ?";
+        return jdbcTemplate.update(sql, Long.valueOf(id));
+    }
 
     public synchronized List<Reservation> findAllReservations() {
         String sql = "SELECT id, name, date, time FROM reservation";
@@ -53,3 +46,4 @@ public class Reservations {
                 });
     }
 }
+
