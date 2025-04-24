@@ -34,4 +34,10 @@ public class TimeRepository {
                     return time;
                 });
     }
+
+    public synchronized int delete(final long id) {
+        // id에 해당하는 시간을 지우고, 해당 쿼리에 영향받는 row 수 반환
+        String sql = "DELETE FROM reservation_time where id = ?";
+        return jdbcTemplate.update(sql, Long.valueOf(id));
+    }
 }
