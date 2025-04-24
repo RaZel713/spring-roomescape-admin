@@ -9,6 +9,7 @@ import roomescape.time.ReservationTime;
 
 @Repository
 public class ReservationRepository {
+
     private final JdbcTemplate jdbcTemplate;
 
     public ReservationRepository(JdbcTemplate jdbcTemplate) {
@@ -16,7 +17,6 @@ public class ReservationRepository {
     }
 
     public synchronized void insert(final Reservation reservation) {
-        // 예약을 데이터 베이스에 저장하기
         String sql = "INSERT INTO reservation (name, date, time_id) VALUES (?, ?, ?)";
         jdbcTemplate.update(
                 sql,
@@ -26,7 +26,6 @@ public class ReservationRepository {
     }
 
     public synchronized int delete(final long id) {
-        // id에 해당하는 reservation을 지우고, 해당 쿼리에 영향받는 row 수 반환
         String sql = "DELETE FROM reservation where id = ?";
         return jdbcTemplate.update(sql, Long.valueOf(id));
     }
@@ -42,7 +41,6 @@ public class ReservationRepository {
                 + "inner join reservation_time as t "
                 + "on r.time_id = t.id";
 
-        // 저장된 모든 Reservations를 list형태로 반환
         return jdbcTemplate.query(
                 sql, (resultSet, rowNum) -> {
                     ReservationTime time = new ReservationTime(
