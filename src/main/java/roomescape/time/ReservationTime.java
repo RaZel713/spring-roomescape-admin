@@ -3,7 +3,8 @@ package roomescape.time;
 import java.time.LocalTime;
 
 public record ReservationTime(
-        long id, LocalTime startAt
+        long id,
+        LocalTime startAt
 ) {
     public ReservationTime {
         if (startAt == null) {
