@@ -61,3 +61,22 @@
 - [x] API 명세를 따라 데이터 베이스를 활용해 시간 추가 API를 구현한다.
 - [x] API 명세를 따라 데이터 베이스를 활용해 시간 조회 API를 구현한다.
 - [x] API 명세를 따라 데이터 베이스를 활용해 시간 삭제 API를 구현한다.
+
+## 🚀 8단계 - 예약과 시간 관리
+
+- 기존에 구현한 예약 기능에서 시간을 시간 테이블에 저장된 값만 선택할 수 있도록 수정한다.
+
+- [ ] 예약 페이지 파일 수정한다.
+    - templates/admin/reservation-legacy.html 대신 templates/admin/reservation.html 파일을 활용한다.
+
+- [ ] 테이블 스키마를 재정의한다.
+    - 외래키 지정을 통해 reservation 테이블과 reservation_time 테이블의 관계를 설정한다.
+
+- [ ] 예약 클래스를 수정한다.
+    - 예약 클래스의 시간 타입을 String에서 ReservationTime 객체로 수정한다.
+
+- [ ] 예약 추가 쿼리 수정
+    - 예약 추가 시, 시간을 문자열(ex. "10:00") 형태로 입력하던 부분을 ReservationTime의 식별자(ex. 1)로 수정한다.
+
+- [ ] 예약 조회 쿼리 수정
+    - 조회 시 ReservationTime 정보도 함께 조회할 수 있게 쿼리를 수정한다.
