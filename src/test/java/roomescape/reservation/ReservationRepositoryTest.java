@@ -2,6 +2,7 @@ package roomescape.reservation;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.hamcrest.core.Is.is;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -24,7 +25,9 @@ import roomescape.time.ReservationTimeRepository;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class ReservationRepositoryTest {
 
+    private static final ReservationTime TIME = new ReservationTime(1L, LocalTime.of(12, 0));
     private static final long DUMMY_ID = 0L;
+
     private ReservationRepository reservationRepository;
     private ReservationTimeRepository reservationTimeRepository;
 
@@ -53,13 +56,12 @@ public class ReservationRepositoryTest {
                 + "PRIMARY KEY (id),"
                 + "FOREIGN KEY (time_id) REFERENCES reservation_time (id))");
 
-        final ReservationTime time = new ReservationTime(1L, LocalTime.of(12, 0));
-        reservationTimeRepository.insert(time);
+        reservationTimeRepository.insert(TIME);
     }
 
     @DisplayName("예약을 입력받아 저장한다.")
     @Test
-    void save1() {
+    void insertReservationTest1() {
         // given
         ReservationTime reservationTime = reservationTimeRepository.findById(1L);
         final Reservation reservation = new Reservation(DUMMY_ID, "검프",
@@ -74,7 +76,7 @@ public class ReservationRepositoryTest {
 
     @DisplayName("예약이 저장되면 아이디를 붙인 예약을 반환한다.")
     @Test
-    void save2() {
+    void insertReservationTest2() {
         // given
         ReservationTime reservationTime = reservationTimeRepository.findById(1L);
         final Reservation reservation = new Reservation(DUMMY_ID, "검프",
@@ -87,7 +89,7 @@ public class ReservationRepositoryTest {
 
     @DisplayName("아이디를 입력받아 예약을 삭제한다.")
     @Test
-    void removeReservation1() {
+    void removeReservationTest1() {
         // given
         ReservationTime reservationTime = reservationTimeRepository.findById(1L);
         final Reservation reservation = new Reservation(DUMMY_ID, "검프",
@@ -101,13 +103,14 @@ public class ReservationRepositoryTest {
 
     @DisplayName("존재하지 않는 아이디가 들어오면 예외가 발생한다.")
     @Test
-    void removeReservation2() {
+    void removeReservationTest2() {
         // when & then
         assertThat(reservationRepository.delete(1L)).isEqualTo(0);
     }
 
+    @DisplayName("오단계: 데이터 조회하기")
     @Test
-    void 오단계() {
+    void step_five() {
         reservationJdbcTemplate.update("INSERT INTO reservation (name, date, time_id) VALUES (?, ?, ?)",
                 "브라운", LocalDate.parse("2023-08-05"), 1L);
 
@@ -122,8 +125,9 @@ public class ReservationRepositoryTest {
         assertThat(reservations.size()).isEqualTo(count);
     }
 
+    @DisplayName("육단계: 데이터 추가 / 삭제하기")
     @Test
-    void 육단계() {
+    void step_six() {
         Map<String, String> params = new HashMap<>();
         params.put("name", "브라운");
         params.put("date", "2023-08-05");
@@ -149,4 +153,25 @@ public class ReservationRepositoryTest {
         assertThat(countAfterDelete).isEqualTo(0);
     }
 
+    @DisplayName("팔단계: 예약과 시간 관리")
+    @Test
+    void step_eight() {
+        Map<String, Object> reservation = new HashMap<>();
+        reservation.put("name", "브라운");
+        reservation.put("date", "2023-08-05");
+        reservation.put("timeId", 1);
+
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(reservation)
+                .when().post("/reservations")
+                .then().log().all()
+                .statusCode(200);
+
+        RestAssured.given().log().all()
+                .when().get("/reservations")
+                .then().log().all()
+                .statusCode(200)
+                .body("size()", is(1));
+    }
 }

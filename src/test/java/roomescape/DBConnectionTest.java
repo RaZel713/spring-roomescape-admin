@@ -14,12 +14,13 @@ import org.springframework.test.annotation.DirtiesContext;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class DBConnectionTest {
+
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    @DisplayName("데이터 베이스를 적용한다.")
+    @DisplayName("사단계: 데이터 베이스 적용하기 - 데이터 베이스 연결 여부를 테스트한다.")
     @Test
-    void connectionTest() throws SQLException {
+    void step_four() {
         try (Connection connection = jdbcTemplate.getDataSource().getConnection()) {
             assertThat(connection).isNotNull();
             assertThat(connection.getCatalog()).isEqualTo("DATABASE");

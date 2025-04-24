@@ -35,20 +35,19 @@ public class ReservationApiTest {
                 .statusCode(200);
     }
 
-    @DisplayName("예약을 생성하고, 200 OK를 응답")
+    @DisplayName("이단계: 예약 조회 - 예약이 존재하지 않는다면 200 OK와 빈 컬렉션 응답한다.")
     @Test
-    void post() {
+    void inquiryReservationTest2() {
         RestAssured.given().log().all()
-                .contentType(ContentType.JSON)
-                .body(RESERVATION_BODY)
-                .when().post("/reservations")
+                .when().get("/reservations")
                 .then().log().all()
-                .statusCode(200);
+                .statusCode(200)
+                .body("size()", is(0));
     }
 
-    @DisplayName("존재하는 모든 예약과 200 OK를 응답")
+    @DisplayName("이단계: 예약 조회 - 존재하는 모든 예약과 200 OK를 응답한다.")
     @Test
-    void get1() {
+    void inquiryReservationTest1() {
         RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
                 .body(RESERVATION_BODY)
@@ -63,19 +62,20 @@ public class ReservationApiTest {
                 .body("size()", is(1));
     }
 
-    @DisplayName("예약이 존재하지 않는다면 200 OK와 빈 컬렉션 응답")
+    @DisplayName("삼단계: 예약 추가 / 취소 - 예약을 추가하고, 200 OK를 응답한다.")
     @Test
-    void get2() {
+    void addReservationTest1() {
         RestAssured.given().log().all()
-                .when().get("/reservations")
+                .contentType(ContentType.JSON)
+                .body(RESERVATION_BODY)
+                .when().post("/reservations")
                 .then().log().all()
-                .statusCode(200)
-                .body("size()", is(0));
+                .statusCode(200);
     }
 
-    @DisplayName("주어진 아이디에 해당하는 예약이 있다면 200 OK 응답")
+    @DisplayName("삼단계: 예약 추가 / 취소 - 삭제 요청시, 주어진 아이디에 해당하는 예약이 있다면 삭제하고, 200 OK 응답한다.")
     @Test
-    void remove1() {
+    void removeReservationTest1() {
         RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
                 .body(RESERVATION_BODY)
@@ -89,9 +89,9 @@ public class ReservationApiTest {
                 .statusCode(200);
     }
 
-    @DisplayName("주어진 아이디에 해당하는 예약이 없다면 404로 응답한다.")
+    @DisplayName("삼단계: 예약 추가 / 취소 - 삭제 요청시, 주어진 아이디에 해당하는 예약이 없다면 404로 응답한다.")
     @Test
-    void remove2() {
+    void removeReservationTest2() {
         RestAssured.given().log().all()
                 .when().delete("/reservations/3")
                 .then().log().all()

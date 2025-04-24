@@ -11,18 +11,18 @@ import org.springframework.test.annotation.DirtiesContext;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class AdminApiTest {
 
-    @DisplayName("/admin으로 요청이 들어오면 어드민 페이지를 응답한다.")
+    @DisplayName("일단계: 홈화면 - /admin으로 요청이 들어오면 어드민 페이지를 응답한다.")
     @Test
-    void admin() {
+    void step_one() {
         RestAssured.given().log().all()
                 .when().get("/admin")
                 .then().log().all()
                 .statusCode(200);
     }
 
-    @DisplayName("/admin/reservation으로 요청이 들어오면 예약 페이지를 응답한다.")
+    @DisplayName("이단계: 예약 조회 - /admin/reservation으로 요청이 들어오면 예약 페이지를 응답한다.")
     @Test
-    void adminReservation() {
+    void step_two() {
         RestAssured.given().log().all()
                 .when().get("/admin/reservation")
                 .then().log().all()
