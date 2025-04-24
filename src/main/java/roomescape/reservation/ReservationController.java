@@ -9,21 +9,33 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import roomescape.time.ReservationTime;
+import roomescape.time.ReservationTimeRepository;
 
 @Controller
 @RequestMapping("/reservations")
 public class ReservationController {
 
     private final ReservationRepository reservationRepository;
+    private final ReservationTimeRepository reservationTimeRepository;
 
-    public ReservationController(ReservationRepository reservationRepository) {
+    public ReservationController(ReservationRepository reservationRepository,
+                                 ReservationTimeRepository reservationTimeRepository) {
         this.reservationRepository = reservationRepository;
+        this.reservationTimeRepository = reservationTimeRepository;
     }
 
     @PostMapping
     public ResponseEntity<Reservation> createReservation(
-            @RequestBody final Reservation reservation
+            @RequestBody final ReservationRequest request
     ) {
+        ReservationTime time = reservationTimeRepository.findById(request.timeId());
+        Reservation reservation = new Reservation(
+                0L,
+                request.name(),
+                request.date(),
+                time
+        );
         reservationRepository.insert(reservation);
         return ResponseEntity.ok().build();
     }

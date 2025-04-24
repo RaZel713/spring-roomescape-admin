@@ -5,6 +5,7 @@ import java.time.LocalTime;
 import java.util.List;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import roomescape.time.ReservationTime;
 
 @Repository
 public class ReservationRepository {
@@ -16,12 +17,12 @@ public class ReservationRepository {
 
     public synchronized void insert(final Reservation reservation) {
         // 예약을 데이터 베이스에 저장하기
-        String sql = "INSERT INTO reservation (name, date, time) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO reservation (name, date, time_id) VALUES (?, ?, ?)";
         jdbcTemplate.update(
                 sql,
                 reservation.name(),
                 reservation.date(),
-                reservation.time());
+                reservation.time().id());
     }
 
     public synchronized int delete(final long id) {
@@ -31,16 +32,28 @@ public class ReservationRepository {
     }
 
     public synchronized List<Reservation> findAllReservations() {
-        String sql = "SELECT id, name, date, time FROM reservation";
+        String sql = "SELECT "
+                + "r.id as reservation_id, "
+                + "r.name, "
+                + "r.date, "
+                + "t.id as time_id, "
+                + "t.start_at as time_value "
+                + "FROM reservation as r "
+                + "inner join reservation_time as t "
+                + "on r.time_id = t.id";
 
         // 저장된 모든 Reservations를 list형태로 반환
         return jdbcTemplate.query(
                 sql, (resultSet, rowNum) -> {
+                    ReservationTime time = new ReservationTime(
+                            resultSet.getLong("time_id"),
+                            LocalTime.parse(resultSet.getString("time_value"))
+                    );
                     Reservation reservation = new Reservation(
-                            resultSet.getLong("id"),
+                            resultSet.getLong("reservation_id"),
                             resultSet.getString("name"),
                             LocalDate.parse(resultSet.getString("date")),
-                            LocalTime.parse(resultSet.getString("time"))
+                            time
                     );
                     return reservation;
                 });

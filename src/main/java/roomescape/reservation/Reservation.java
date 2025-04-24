@@ -1,10 +1,13 @@
 package roomescape.reservation;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
+import roomescape.time.ReservationTime;
 
 public record Reservation(
-        long id, String name, LocalDate date, LocalTime time
+        long id,
+        String name,
+        LocalDate date,
+        ReservationTime time
 ) {
 
     public Reservation {

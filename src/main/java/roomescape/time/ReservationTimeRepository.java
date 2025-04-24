@@ -40,4 +40,14 @@ public class ReservationTimeRepository {
         String sql = "DELETE FROM reservation_time where id = ?";
         return jdbcTemplate.update(sql, Long.valueOf(id));
     }
+
+    public ReservationTime findById(final long id) {
+        String sql = "SELECT id, start_at FROM reservation_time WHERE id = ?";
+        return jdbcTemplate.queryForObject(sql, (resultSet, rowNum) ->
+                new ReservationTime(
+                        resultSet.getLong("id"),
+                        LocalTime.parse(resultSet.getString("start_at"))
+                ), id
+        );
+    }
 }
