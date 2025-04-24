@@ -4,7 +4,9 @@ import static org.hamcrest.Matchers.is;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import java.util.HashMap;
 import java.util.Map;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,8 +19,21 @@ public class ReservationApiTest {
     private static final Map<String, String> RESERVATION_BODY = Map.of(
             "name", "브라운",
             "date", "2023-08-05",
-            "time", "15:40"
+            "timeId", "1"
     );
+
+    @BeforeEach
+    void setUp() {
+        Map<String, String> params = new HashMap<>();
+        params.put("startAt", "10:00");
+
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(params)
+                .when().post("/times")
+                .then().log().all()
+                .statusCode(200);
+    }
 
     @DisplayName("예약을 생성하고, 200 OK를 응답")
     @Test

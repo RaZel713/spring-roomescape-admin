@@ -17,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.annotation.DirtiesContext;
+import roomescape.time.ReservationTime;
+import roomescape.time.ReservationTimeRepository;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
@@ -24,28 +26,44 @@ public class ReservationRepositoryTest {
 
     private static final long DUMMY_ID = 0L;
     private ReservationRepository reservationRepository;
+    private ReservationTimeRepository reservationTimeRepository;
 
     @Autowired
-    private JdbcTemplate jdbcTemplate;
+    private JdbcTemplate jdbcTemplate1;
+    @Autowired
+    private JdbcTemplate jdbcTemplate2;
 
     @BeforeEach
     void setUp() {
-        reservationRepository = new ReservationRepository(jdbcTemplate);
-        jdbcTemplate.execute("DROP TABLE IF EXISTS reservation");
-        jdbcTemplate.execute("CREATE TABLE reservation("
-                + "id BIGINT NOT NULL AUTO_INCREMENT, "
-                + "name VARCHAR(255) NOT NULL, "
-                + "date VARCHAR(255) NOT NULL, "
-                + "time VARCHAR(255) NOT NULL, "
+        reservationRepository = new ReservationRepository(jdbcTemplate1);
+        reservationTimeRepository = new ReservationTimeRepository(jdbcTemplate2);
+
+        jdbcTemplate1.execute("DROP TABLE IF EXISTS reservation");
+        jdbcTemplate2.execute("DROP TABLE IF EXISTS reservation_time");
+
+        jdbcTemplate2.execute("CREATE TABLE reservation_time ("
+                + "id BIGINT NOT NULL AUTO_INCREMENT,"
+                + "start_at VARCHAR(255) NOT NULL,"
                 + "PRIMARY KEY (id))");
+        jdbcTemplate1.execute("CREATE TABLE reservation ("
+                + "id BIGINT NOT NULL AUTO_INCREMENT,"
+                + "name VARCHAR(255) NOT NULL,"
+                + "date VARCHAR(255) NOT NULL,"
+                + "time_id BIGINT, "
+                + "PRIMARY KEY (id),"
+                + "FOREIGN KEY (time_id) REFERENCES reservation_time (id))");
+
+        final ReservationTime time = new ReservationTime(1L, LocalTime.of(12, 0));
+        reservationTimeRepository.insert(time);
     }
 
     @DisplayName("예약을 입력받아 저장한다.")
     @Test
     void save1() {
         // given
+        ReservationTime reservationTime = reservationTimeRepository.findById(1L);
         final Reservation reservation = new Reservation(DUMMY_ID, "검프",
-                LocalDate.of(2025, 4, 4), LocalTime.of(14, 28));
+                LocalDate.of(2025, 4, 4), reservationTime);
 
         // when
         reservationRepository.insert(reservation);
@@ -58,8 +76,9 @@ public class ReservationRepositoryTest {
     @Test
     void save2() {
         // given
+        ReservationTime reservationTime = reservationTimeRepository.findById(1L);
         final Reservation reservation = new Reservation(DUMMY_ID, "검프",
-                LocalDate.of(2025, 4, 4), LocalTime.of(14, 28));
+                LocalDate.of(2025, 4, 4), reservationTime);
 
         // then
         assertThatCode(() -> reservationRepository.insert(reservation))
@@ -70,8 +89,10 @@ public class ReservationRepositoryTest {
     @Test
     void removeReservation1() {
         // given
+        ReservationTime reservationTime = reservationTimeRepository.findById(1L);
         final Reservation reservation = new Reservation(DUMMY_ID, "검프",
-                LocalDate.of(2025, 4, 4), LocalTime.of(14, 28));
+                LocalDate.of(2025, 4, 4), reservationTime);
+
         reservationRepository.insert(reservation);
 
         // then
@@ -87,8 +108,8 @@ public class ReservationRepositoryTest {
 
     @Test
     void 오단계() {
-        jdbcTemplate.update("INSERT INTO reservation (name, date, time) VALUES (?, ?, ?)",
-                "브라운", "2023-08-05", "15:40");
+        jdbcTemplate1.update("INSERT INTO reservation (name, date, time_id) VALUES (?, ?, ?)",
+                "브라운", LocalDate.parse("2023-08-05"), 1L);
 
         List<Reservation> reservations = RestAssured.given().log().all()
                 .when().get("/reservations")
@@ -96,7 +117,7 @@ public class ReservationRepositoryTest {
                 .statusCode(200).extract()
                 .jsonPath().getList(".", Reservation.class);
 
-        Integer count = jdbcTemplate.queryForObject("SELECT count(1) from reservation", Integer.class);
+        Integer count = jdbcTemplate1.queryForObject("SELECT count(1) from reservation", Integer.class);
 
         assertThat(reservations.size()).isEqualTo(count);
     }
@@ -106,7 +127,7 @@ public class ReservationRepositoryTest {
         Map<String, String> params = new HashMap<>();
         params.put("name", "브라운");
         params.put("date", "2023-08-05");
-        params.put("time", "10:00");
+        params.put("timeId", "1");
 
         RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
@@ -115,7 +136,7 @@ public class ReservationRepositoryTest {
                 .then().log().all()
                 .statusCode(200);
 
-        Integer count = jdbcTemplate.queryForObject("SELECT count(1) from reservation", Integer.class);
+        Integer count = jdbcTemplate1.queryForObject("SELECT count(1) from reservation", Integer.class);
         assertThat(count).isEqualTo(1);
 
         RestAssured.given().log().all()
@@ -123,7 +144,7 @@ public class ReservationRepositoryTest {
                 .then().log().all()
                 .statusCode(200);
 
-        Integer countAfterDelete = jdbcTemplate.queryForObject("SELECT count(1) from reservation", Integer.class);
+        Integer countAfterDelete = jdbcTemplate1.queryForObject("SELECT count(1) from reservation", Integer.class);
         assertThat(countAfterDelete).isEqualTo(0);
     }
 
