@@ -1,5 +1,7 @@
 package roomescape.time;
 
+import java.time.LocalTime;
+import java.util.List;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -17,5 +19,19 @@ public class TimeRepository {
         jdbcTemplate.update(
                 sql,
                 time.startAt());
+    }
+
+    public synchronized List<Time> findAllReservationTime() {
+        String sql = "SELECT id, start_at FROM reservation_time";
+
+        // 저장된 모든 시갇들을 list 형태로 반환
+        return jdbcTemplate.query(
+                sql, (resultSet, rowNum) -> {
+                    Time time = new Time(
+                            resultSet.getLong("id"),
+                            LocalTime.parse(resultSet.getString("start_at"))
+                    );
+                    return time;
+                });
     }
 }
