@@ -66,7 +66,7 @@
 
 - 기존에 구현한 예약 기능에서 시간을 시간 테이블에 저장된 값만 선택할 수 있도록 수정한다.
 
-- [ ] 예약 페이지 파일 수정한다.
+- [x] 예약 페이지 파일 수정한다.
     - templates/admin/reservation-legacy.html 대신 templates/admin/reservation.html 파일을 활용한다.
 
 - [ ] 테이블 스키마를 재정의한다.
