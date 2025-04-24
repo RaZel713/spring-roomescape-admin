@@ -7,10 +7,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class Reservations {
+public class ReservationRepository {
     private final JdbcTemplate jdbcTemplate;
 
-    public Reservations(JdbcTemplate jdbcTemplate) {
+    public ReservationRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 

@@ -14,30 +14,30 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/reservations")
 public class ReservationController {
 
-    private final Reservations reservations;
+    private final ReservationRepository reservationRepository;
 
-    public ReservationController(Reservations reservations) {
-        this.reservations = reservations;
+    public ReservationController(ReservationRepository reservationRepository) {
+        this.reservationRepository = reservationRepository;
     }
 
     @PostMapping
     public ResponseEntity<Reservation> createReservation(
             @RequestBody final Reservation reservation
     ) {
-        reservations.insert(reservation);
+        reservationRepository.insert(reservation);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping
     public ResponseEntity<List<Reservation>> readAllReservation() {
-        return ResponseEntity.ok(reservations.findAllReservations());
+        return ResponseEntity.ok(reservationRepository.findAllReservations());
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteReservationById(
             @PathVariable("id") final long id
     ) {
-        if (reservations.delete(id) == 0) {
+        if (reservationRepository.delete(id) == 0) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok().build();

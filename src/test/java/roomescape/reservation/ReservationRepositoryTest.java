@@ -20,17 +20,17 @@ import org.springframework.test.annotation.DirtiesContext;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-public class ReservationsTest {
+public class ReservationRepositoryTest {
 
     private static final long DUMMY_ID = 0L;
-    private Reservations reservations;
+    private ReservationRepository reservationRepository;
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
     @BeforeEach
     void setUp() {
-        reservations = new Reservations(jdbcTemplate);
+        reservationRepository = new ReservationRepository(jdbcTemplate);
         jdbcTemplate.execute("DROP TABLE IF EXISTS reservation");
         jdbcTemplate.execute("CREATE TABLE reservation("
                 + "id BIGINT NOT NULL AUTO_INCREMENT, "
@@ -48,10 +48,10 @@ public class ReservationsTest {
                 LocalDate.of(2025, 4, 4), LocalTime.of(14, 28));
 
         // when
-        reservations.insert(reservation);
+        reservationRepository.insert(reservation);
 
         // then
-        assertThat(reservations.findAllReservations()).hasSize(1);
+        assertThat(reservationRepository.findAllReservations()).hasSize(1);
     }
 
     @DisplayName("예약이 저장되면 아이디를 붙인 예약을 반환한다.")
@@ -62,7 +62,7 @@ public class ReservationsTest {
                 LocalDate.of(2025, 4, 4), LocalTime.of(14, 28));
 
         // then
-        assertThatCode(() -> reservations.insert(reservation))
+        assertThatCode(() -> reservationRepository.insert(reservation))
                 .doesNotThrowAnyException();
     }
 
@@ -72,17 +72,17 @@ public class ReservationsTest {
         // given
         final Reservation reservation = new Reservation(DUMMY_ID, "검프",
                 LocalDate.of(2025, 4, 4), LocalTime.of(14, 28));
-        reservations.insert(reservation);
+        reservationRepository.insert(reservation);
 
         // then
-        assertThat(reservations.delete(1L)).isEqualTo(1);
+        assertThat(reservationRepository.delete(1L)).isEqualTo(1);
     }
 
     @DisplayName("존재하지 않는 아이디가 들어오면 예외가 발생한다.")
     @Test
     void removeReservation2() {
         // when & then
-        assertThat(reservations.delete(1L)).isEqualTo(0);
+        assertThat(reservationRepository.delete(1L)).isEqualTo(0);
     }
 
     @Test
