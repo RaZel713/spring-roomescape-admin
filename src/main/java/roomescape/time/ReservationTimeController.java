@@ -12,32 +12,32 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/times")
-public class TimeController {
+public class ReservationTimeController {
 
-    private final TimeRepository timeRepository;
+    private final ReservationTimeRepository reservationTimeRepository;
 
-    public TimeController(TimeRepository timeRepository) {
-        this.timeRepository = timeRepository;
+    public ReservationTimeController(ReservationTimeRepository reservationTimeRepository) {
+        this.reservationTimeRepository = reservationTimeRepository;
     }
 
     @PostMapping
-    public ResponseEntity<Time> createTime(
-            @RequestBody final Time time
+    public ResponseEntity<ReservationTime> createTime(
+            @RequestBody final ReservationTime reservationTime
     ) {
-        timeRepository.insert(time);
+        reservationTimeRepository.insert(reservationTime);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping
-    public ResponseEntity<List<Time>> readAllTie() {
-        return ResponseEntity.ok(timeRepository.findAllReservationTime());
+    public ResponseEntity<List<ReservationTime>> readAllTie() {
+        return ResponseEntity.ok(reservationTimeRepository.findAllReservationTime());
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTimeById(
             @PathVariable("id") final long id
     ) {
-        if (timeRepository.delete(id) == 0) {
+        if (reservationTimeRepository.delete(id) == 0) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok().build();
