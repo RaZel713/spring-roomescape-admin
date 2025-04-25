@@ -20,7 +20,7 @@ public class ReservationTimeService {
         return reservationTimeRepository.findAllReservationTime();
     }
 
-    public void deleteReservationTime(Long id) {
+    public void deleteReservationTime(final Long id) {
         if (reservationTimeRepository.delete(id) == 0) {
             throw new NoSuchElementException("[ERROR] 해당 ID의 시간을 찾을 수 없습니다. id:" + id);
         }

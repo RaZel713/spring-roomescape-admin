@@ -17,7 +17,7 @@ public class ReservationRepository {
     }
 
     public synchronized void insert(final Reservation reservation) {
-        String sql = "INSERT INTO reservation (name, date, time_id) VALUES (?, ?, ?)";
+        final String sql = "INSERT INTO reservation (name, date, time_id) VALUES (?, ?, ?)";
         jdbcTemplate.update(
                 sql,
                 reservation.name(),
@@ -26,12 +26,12 @@ public class ReservationRepository {
     }
 
     public synchronized int delete(final long id) {
-        String sql = "DELETE FROM reservation where id = ?";
+        final String sql = "DELETE FROM reservation where id = ?";
         return jdbcTemplate.update(sql, Long.valueOf(id));
     }
 
     public synchronized List<Reservation> findAllReservations() {
-        String sql = "SELECT "
+        final String sql = "SELECT "
                 + "r.id as reservation_id, "
                 + "r.name, "
                 + "r.date, "
