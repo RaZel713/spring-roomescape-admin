@@ -1,6 +1,7 @@
 package roomescape.time;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -9,37 +10,41 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import roomescape.service.ReservationTimeService;
 
 @Controller
 @RequestMapping("/times")
 public class ReservationTimeController {
 
-    private final ReservationTimeRepository reservationTimeRepository;
+    private final ReservationTimeService reservationTimeService;
 
-    public ReservationTimeController(ReservationTimeRepository reservationTimeRepository) {
-        this.reservationTimeRepository = reservationTimeRepository;
+    public ReservationTimeController(ReservationTimeService reservationTimeService) {
+        this.reservationTimeService = reservationTimeService;
     }
 
     @PostMapping
     public ResponseEntity<ReservationTime> createTime(
             @RequestBody final ReservationTime reservationTime
     ) {
-        reservationTimeRepository.insert(reservationTime);
+        reservationTimeService.createReservationTime(reservationTime);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping
     public ResponseEntity<List<ReservationTime>> readAllTie() {
-        return ResponseEntity.ok(reservationTimeRepository.findAllReservationTime());
+        List<ReservationTime> reservationTimes = reservationTimeService.getAllReservationTime();
+        return ResponseEntity.ok(reservationTimes);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTimeById(
             @PathVariable("id") final long id
     ) {
-        if (reservationTimeRepository.delete(id) == 0) {
+        try {
+            reservationTimeService.deleteReservationTime(id);
+            return ResponseEntity.ok().build();
+        } catch (NoSuchElementException e) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok().build();
     }
 }
