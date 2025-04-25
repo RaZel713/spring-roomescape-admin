@@ -1,4 +1,4 @@
-package roomescape.time;
+package roomescape.reservationtime;
 
 import java.util.List;
 import java.util.NoSuchElementException;

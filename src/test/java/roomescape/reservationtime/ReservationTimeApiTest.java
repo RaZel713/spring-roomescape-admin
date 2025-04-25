@@ -1,4 +1,4 @@
-package roomescape.time;
+package roomescape.reservationtime;
 
 import static org.hamcrest.core.Is.is;
 

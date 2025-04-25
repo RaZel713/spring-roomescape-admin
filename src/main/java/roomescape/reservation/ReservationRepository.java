@@ -5,7 +5,7 @@ import java.time.LocalTime;
 import java.util.List;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import roomescape.time.ReservationTime;
+import roomescape.reservationtime.ReservationTime;
 
 @Repository
 public class ReservationRepository {

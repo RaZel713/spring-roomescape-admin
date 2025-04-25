@@ -3,8 +3,8 @@ package roomescape.reservation;
 import java.util.List;
 import java.util.NoSuchElementException;
 import org.springframework.stereotype.Service;
-import roomescape.time.ReservationTime;
-import roomescape.time.ReservationTimeRepository;
+import roomescape.reservationtime.ReservationTime;
+import roomescape.reservationtime.ReservationTimeRepository;
 
 @Service
 public class ReservationService {
