@@ -1,6 +1,8 @@
 package roomescape.reservation;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -9,10 +11,11 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import roomescape.BaseRepository;
 import roomescape.reservationtime.ReservationTime;
 
 @Repository
-public class ReservationRepository {
+public class ReservationRepository implements BaseRepository<Reservation> {
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -86,18 +89,20 @@ public class ReservationRepository {
                 """;
 
         return jdbcTemplate.queryForObject(
-                sql, (resultSet, rowNum) -> {
-                    ReservationTime time = new ReservationTime(
-                            resultSet.getLong("time_id"),
-                            LocalTime.parse(resultSet.getString("time_value"))
-                    );
-                    return new Reservation(
-                            resultSet.getLong("reservation_id"),
-                            resultSet.getString("name"),
-                            LocalDate.parse(resultSet.getString("date")),
-                            time
-                    );
-                },
-                id);
+                sql, (resultSet, rowNum) -> mapRow(resultSet), id);
+    }
+
+    @Override
+    public Reservation mapRow(ResultSet resultSet) throws SQLException {
+        ReservationTime time = new ReservationTime(
+                resultSet.getLong("time_id"),
+                LocalTime.parse(resultSet.getString("time_value"))
+        );
+        return new Reservation(
+                resultSet.getLong("reservation_id"),
+                resultSet.getString("name"),
+                LocalDate.parse(resultSet.getString("date")),
+                time
+        );
     }
 }

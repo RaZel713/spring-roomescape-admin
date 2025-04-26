@@ -1,6 +1,8 @@
 package roomescape.reservationtime;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Objects;
@@ -8,9 +10,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import roomescape.BaseRepository;
 
 @Repository
-public class ReservationTimeRepository {
+public class ReservationTimeRepository implements BaseRepository<ReservationTime> {
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -42,10 +45,7 @@ public class ReservationTimeRepository {
         final String sql = "SELECT id, start_at FROM reservation_time";
 
         return jdbcTemplate.query(
-                sql, (resultSet, rowNum) -> new ReservationTime(
-                        resultSet.getLong("id"),
-                        LocalTime.parse(resultSet.getString("start_at"))
-                ));
+                sql, (resultSet, rowNum) -> mapRow(resultSet));
     }
 
     public synchronized int delete(final long id) {
@@ -55,11 +55,15 @@ public class ReservationTimeRepository {
 
     public ReservationTime findById(final long id) {
         final String sql = "SELECT id, start_at FROM reservation_time WHERE id = ?";
-        return jdbcTemplate.queryForObject(sql, (resultSet, rowNum) ->
-                new ReservationTime(
-                        resultSet.getLong("id"),
-                        LocalTime.parse(resultSet.getString("start_at"))
-                ), id
+        return jdbcTemplate.queryForObject(sql, (resultSet, rowNum) -> mapRow(resultSet), id
+        );
+    }
+
+    @Override
+    public ReservationTime mapRow(ResultSet resultSet) throws SQLException {
+        return new ReservationTime(
+                resultSet.getLong("id"),
+                LocalTime.parse(resultSet.getString("start_at"))
         );
     }
 }
