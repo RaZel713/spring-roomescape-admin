@@ -32,16 +32,20 @@ public class ReservationTimeRepository {
         return findById(id);
     }
 
+    public boolean existsBy(LocalTime startAt) {
+        final String sql = "SELECT COUNT(*) FROM reservation_time WHERE start_at = ?";
+        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, startAt);
+        return count != null && count > 0;
+    }
+
     public synchronized List<ReservationTime> findAllReservationTime() {
         final String sql = "SELECT id, start_at FROM reservation_time";
 
         return jdbcTemplate.query(
-                sql, (resultSet, rowNum) -> {
-                    return new ReservationTime(
-                            resultSet.getLong("id"),
-                            LocalTime.parse(resultSet.getString("start_at"))
-                    );
-                });
+                sql, (resultSet, rowNum) -> new ReservationTime(
+                        resultSet.getLong("id"),
+                        LocalTime.parse(resultSet.getString("start_at"))
+                ));
     }
 
     public synchronized int delete(final long id) {

@@ -13,7 +13,15 @@ public class ReservationTimeService {
     }
 
     public ReservationTime createReservationTime(ReservationTime reservationTime) {
+        if (isReservationTimeExist(reservationTime)) {
+            throw new IllegalArgumentException("[ERROR] 이미 존재하는 예약 시간이 있습니다.");
+        }
+
         return reservationTimeRepository.insert(reservationTime);
+    }
+
+    private boolean isReservationTimeExist(ReservationTime reservationTime) {
+        return reservationTimeRepository.existsBy(reservationTime.startAt());
     }
 
     public List<ReservationTime> getAllReservationTime() {
