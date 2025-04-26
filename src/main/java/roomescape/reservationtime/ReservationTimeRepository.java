@@ -16,9 +16,7 @@ public class ReservationTimeRepository {
 
     public synchronized void insert(final ReservationTime reservationTime) {
         final String sql = "INSERT INTO reservation_time (start_at) VALUES (?)";
-        jdbcTemplate.update(
-                sql,
-                reservationTime.startAt());
+        jdbcTemplate.update(sql, reservationTime.startAt());
     }
 
     public synchronized List<ReservationTime> findAllReservationTime() {

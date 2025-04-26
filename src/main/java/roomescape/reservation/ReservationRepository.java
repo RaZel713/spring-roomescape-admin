@@ -18,11 +18,7 @@ public class ReservationRepository {
 
     public synchronized void insert(final Reservation reservation) {
         final String sql = "INSERT INTO reservation (name, date, time_id) VALUES (?, ?, ?)";
-        jdbcTemplate.update(
-                sql,
-                reservation.name(),
-                reservation.date(),
-                reservation.time().id());
+        jdbcTemplate.update(sql, reservation.name(), reservation.date(), reservation.time().id());
     }
 
     public synchronized int delete(final long id) {
