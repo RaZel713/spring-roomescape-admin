@@ -1,4 +1,4 @@
-package roomescape.reservation;
+package roomescape.controller;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import roomescape.domain.reservation.CreateReservationRequest;
+import roomescape.domain.reservation.Reservation;
+import roomescape.service.ReservationService;
 
 @Controller
 @RequestMapping("/reservations")
