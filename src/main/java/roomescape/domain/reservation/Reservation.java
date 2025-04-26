@@ -23,4 +23,8 @@ public record Reservation(
             throw new IllegalArgumentException(ERROR_SIGN + "시간이 비어 있을 수 없습니다.");
         }
     }
+
+    public Reservation(String name, LocalDate date, ReservationTime time) {
+        this(0L, name, date, time);
+    }
 }

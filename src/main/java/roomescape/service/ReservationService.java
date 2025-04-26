@@ -25,12 +25,7 @@ public class ReservationService {
 
     public Reservation createReservation(final CreateReservationRequest request) {
         final ReservationTime time = reservationTimeRepository.findById(request.timeId());
-        final Reservation reservation = new Reservation(
-                0L,
-                request.name(),
-                request.date(),
-                time
-        );
+        final Reservation reservation = new Reservation(request.name(), request.date(), time);
         return reservationRepository.insert(reservation);
     }
 
