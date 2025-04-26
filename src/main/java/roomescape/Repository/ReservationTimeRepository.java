@@ -32,7 +32,7 @@ public class ReservationTimeRepository implements BaseRepository<ReservationTime
             return ps;
         }, keyHolder);
 
-        long id = Objects.requireNonNull(keyHolder.getKey()).longValue();
+        Long id = Objects.requireNonNull(keyHolder.getKey()).longValue();
         return findById(id);
     }
 
@@ -50,14 +50,14 @@ public class ReservationTimeRepository implements BaseRepository<ReservationTime
     }
 
     @Override
-    public ReservationTime findById(final long id) {
+    public ReservationTime findById(final Long id) {
         final String sql = "SELECT id, start_at FROM reservation_time WHERE id = ?";
         return jdbcTemplate.queryForObject(sql, (resultSet, rowNum) -> mapRow(resultSet), id
         );
     }
 
     @Override
-    public synchronized int delete(final long id) {
+    public synchronized int delete(final Long id) {
         final String sql = "DELETE FROM reservation_time where id = ?";
         return jdbcTemplate.update(sql, id);
     }

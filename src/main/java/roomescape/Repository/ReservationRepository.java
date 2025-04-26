@@ -37,7 +37,7 @@ public class ReservationRepository implements BaseRepository<Reservation> {
             return ps;
         }, keyHolder);
 
-        long id = Objects.requireNonNull(keyHolder.getKey()).longValue();
+        Long id = Objects.requireNonNull(keyHolder.getKey()).longValue();
 
         return findById(id);
     }
@@ -61,7 +61,7 @@ public class ReservationRepository implements BaseRepository<Reservation> {
     }
 
     @Override
-    public Reservation findById(final long id) {
+    public Reservation findById(final Long id) {
         final String sql = """
                 SELECT
                     r.id as reservation_id,
@@ -80,7 +80,7 @@ public class ReservationRepository implements BaseRepository<Reservation> {
     }
 
     @Override
-    public synchronized int delete(final long id) {
+    public synchronized int delete(final Long id) {
         final String sql = "DELETE FROM reservation where id = ?";
         return jdbcTemplate.update(sql, id);
     }
