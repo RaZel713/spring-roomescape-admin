@@ -35,7 +35,7 @@ public class ReservationService {
     }
 
     public List<Reservation> readAllReservations() {
-        return reservationRepository.findAllReservations();
+        return reservationRepository.findAll();
     }
 
     public void deleteReservation(final Long id) {

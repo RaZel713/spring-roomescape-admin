@@ -23,6 +23,7 @@ public class ReservationRepository implements BaseRepository<Reservation> {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    @Override
     public synchronized Reservation insert(final Reservation reservation) {
         final String sql = "INSERT INTO reservation (name, date, time_id) VALUES (?, ?, ?)";
 
@@ -41,12 +42,8 @@ public class ReservationRepository implements BaseRepository<Reservation> {
         return findById(id);
     }
 
-    public synchronized int delete(final long id) {
-        final String sql = "DELETE FROM reservation where id = ?";
-        return jdbcTemplate.update(sql, id);
-    }
-
-    public synchronized List<Reservation> findAllReservations() {
+    @Override
+    public synchronized List<Reservation> findAll() {
         final String sql = """
                 SELECT
                     r.id as reservation_id,
@@ -60,20 +57,10 @@ public class ReservationRepository implements BaseRepository<Reservation> {
                 """;
 
         return jdbcTemplate.query(
-                sql, (resultSet, rowNum) -> {
-                    ReservationTime time = new ReservationTime(
-                            resultSet.getLong("time_id"),
-                            LocalTime.parse(resultSet.getString("time_value"))
-                    );
-                    return new Reservation(
-                            resultSet.getLong("reservation_id"),
-                            resultSet.getString("name"),
-                            LocalDate.parse(resultSet.getString("date")),
-                            time
-                    );
-                });
+                sql, (resultSet, rowNum) -> mapRow(resultSet));
     }
 
+    @Override
     public Reservation findById(final long id) {
         final String sql = """
                 SELECT
@@ -90,6 +77,12 @@ public class ReservationRepository implements BaseRepository<Reservation> {
 
         return jdbcTemplate.queryForObject(
                 sql, (resultSet, rowNum) -> mapRow(resultSet), id);
+    }
+
+    @Override
+    public synchronized int delete(final long id) {
+        final String sql = "DELETE FROM reservation where id = ?";
+        return jdbcTemplate.update(sql, id);
     }
 
     @Override

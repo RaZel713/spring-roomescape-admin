@@ -30,7 +30,7 @@ public class ReservationTimeService {
     }
 
     public List<ReservationTime> getAllReservationTime() {
-        return reservationTimeRepository.findAllReservationTime();
+        return reservationTimeRepository.findAll();
     }
 
     public void deleteReservationTime(final Long id) {

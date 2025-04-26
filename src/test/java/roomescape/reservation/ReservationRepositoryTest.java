@@ -73,7 +73,7 @@ public class ReservationRepositoryTest {
         reservationRepository.insert(reservation);
 
         // then
-        assertThat(reservationRepository.findAllReservations()).hasSize(1);
+        assertThat(reservationRepository.findAll()).hasSize(1);
     }
 
     @DisplayName("예약이 저장되면 아이디를 붙인 예약을 반환한다.")
