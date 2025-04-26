@@ -6,6 +6,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ReservationTimeService {
+
+    private static final int DELETE_NO_ROWS_AFFECTED = 0;
+
     private final ReservationTimeRepository reservationTimeRepository;
 
     public ReservationTimeService(ReservationTimeRepository reservationTimeRepository) {
@@ -29,7 +32,7 @@ public class ReservationTimeService {
     }
 
     public void deleteReservationTime(final Long id) {
-        if (reservationTimeRepository.delete(id) == 0) {
+        if (reservationTimeRepository.delete(id) == DELETE_NO_ROWS_AFFECTED) {
             throw new NoSuchElementException("[ERROR] 해당 ID의 시간을 찾을 수 없습니다. id:" + id);
         }
     }

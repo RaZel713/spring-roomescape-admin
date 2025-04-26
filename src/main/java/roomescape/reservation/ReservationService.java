@@ -9,6 +9,8 @@ import roomescape.reservationtime.ReservationTimeRepository;
 @Service
 public class ReservationService {
 
+    private static final int DELETE_NO_ROWS_AFFECTED = 0;
+
     private final ReservationRepository reservationRepository;
     private final ReservationTimeRepository reservationTimeRepository;
 
@@ -34,8 +36,9 @@ public class ReservationService {
     }
 
     public void deleteReservation(final Long id) {
-        if (reservationRepository.delete(id) == 0) {
+        if (reservationRepository.delete(id) == DELETE_NO_ROWS_AFFECTED) {
             throw new NoSuchElementException("[ERROR] 해당 ID의 예약을 찾을 수 없습니다. id:" + id);
         }
     }
 }
+
