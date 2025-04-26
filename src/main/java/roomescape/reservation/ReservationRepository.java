@@ -27,15 +27,17 @@ public class ReservationRepository {
     }
 
     public synchronized List<Reservation> findAllReservations() {
-        final String sql = "SELECT "
-                + "r.id as reservation_id, "
-                + "r.name, "
-                + "r.date, "
-                + "t.id as time_id, "
-                + "t.start_at as time_value "
-                + "FROM reservation as r "
-                + "inner join reservation_time as t "
-                + "on r.time_id = t.id";
+        final String sql = """
+                SELECT\s
+                    r.id as reservation_id,\s
+                    r.name,\s
+                    r.date,\s
+                    t.id as time_id,\s
+                    t.start_at as time_value\s
+                FROM reservation as r\s
+                inner join reservation_time as t\s
+                on r.time_id = t.id
+                """;
 
         return jdbcTemplate.query(
                 sql, (resultSet, rowNum) -> {
