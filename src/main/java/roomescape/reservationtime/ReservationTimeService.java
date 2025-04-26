@@ -12,8 +12,8 @@ public class ReservationTimeService {
         this.reservationTimeRepository = reservationTimeRepository;
     }
 
-    public void createReservationTime(ReservationTime reservationTime) {
-        reservationTimeRepository.insert(reservationTime);
+    public ReservationTime createReservationTime(ReservationTime reservationTime) {
+        return reservationTimeRepository.insert(reservationTime);
     }
 
     public List<ReservationTime> getAllReservationTime() {

@@ -25,8 +25,8 @@ public class ReservationTimeController {
     public ResponseEntity<ReservationTime> createTime(
             @RequestBody final ReservationTime reservationTime
     ) {
-        reservationTimeService.createReservationTime(reservationTime);
-        return ResponseEntity.ok().build();
+        ReservationTime insertedReservationTime = reservationTimeService.createReservationTime(reservationTime);
+        return ResponseEntity.ok(insertedReservationTime);
     }
 
     @GetMapping
