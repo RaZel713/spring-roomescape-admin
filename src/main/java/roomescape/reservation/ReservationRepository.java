@@ -27,7 +27,7 @@ public class ReservationRepository {
 
     public synchronized int delete(final long id) {
         final String sql = "DELETE FROM reservation where id = ?";
-        return jdbcTemplate.update(sql, Long.valueOf(id));
+        return jdbcTemplate.update(sql, id);
     }
 
     public synchronized List<Reservation> findAllReservations() {
