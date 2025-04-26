@@ -20,7 +20,7 @@ public class ReservationService {
         this.reservationTimeRepository = reservationTimeRepository;
     }
 
-    public Reservation createReservation(final ReservationRequest request) {
+    public Reservation createReservation(final CreateReservationRequest request) {
         final ReservationTime time = reservationTimeRepository.findById(request.timeId());
         final Reservation reservation = new Reservation(
                 0L,
