@@ -30,7 +30,7 @@ public class ReservationTimeController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ReservationTime>> readAllTie() {
+    public ResponseEntity<List<ReservationTime>> readAllTime() {
         final List<ReservationTime> reservationTimes = reservationTimeService.getAllReservationTime();
         return ResponseEntity.ok(reservationTimes);
     }
