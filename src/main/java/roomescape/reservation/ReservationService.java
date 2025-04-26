@@ -18,7 +18,7 @@ public class ReservationService {
         this.reservationTimeRepository = reservationTimeRepository;
     }
 
-    public void createReservation(final ReservationRequest request) {
+    public Reservation createReservation(final ReservationRequest request) {
         final ReservationTime time = reservationTimeRepository.findById(request.timeId());
         final Reservation reservation = new Reservation(
                 0L,
@@ -26,7 +26,7 @@ public class ReservationService {
                 request.date(),
                 time
         );
-        reservationRepository.insert(reservation);
+        return reservationRepository.insert(reservation);
     }
 
     public List<Reservation> readAllReservations() {

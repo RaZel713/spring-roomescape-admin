@@ -25,8 +25,8 @@ public class ReservationController {
     public ResponseEntity<Reservation> createReservation(
             @RequestBody final ReservationRequest request
     ) {
-        reservationService.createReservation(request);
-        return ResponseEntity.ok().build();
+        Reservation insertedReservation = reservationService.createReservation(request);
+        return ResponseEntity.ok(insertedReservation);
     }
 
     @GetMapping

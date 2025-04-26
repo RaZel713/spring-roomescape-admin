@@ -1,9 +1,13 @@
 package roomescape.reservation;
 
+import java.sql.PreparedStatement;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Objects;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import roomescape.reservationtime.ReservationTime;
 
@@ -16,9 +20,22 @@ public class ReservationRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public synchronized void insert(final Reservation reservation) {
+    public synchronized Reservation insert(final Reservation reservation) {
         final String sql = "INSERT INTO reservation (name, date, time_id) VALUES (?, ?, ?)";
-        jdbcTemplate.update(sql, reservation.name(), reservation.date(), reservation.time().id());
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(sql, new String[]{"id"});
+            ps.setString(1, reservation.name());
+            ps.setString(2, String.valueOf(reservation.date()));
+            ps.setLong(3, reservation.time().id());
+            return ps;
+        }, keyHolder);
+
+        long id = Objects.requireNonNull(keyHolder.getKey()).longValue();
+
+        return findById(id);
     }
 
     public synchronized int delete(final long id) {
@@ -28,14 +45,14 @@ public class ReservationRepository {
 
     public synchronized List<Reservation> findAllReservations() {
         final String sql = """
-                SELECT\s
-                    r.id as reservation_id,\s
-                    r.name,\s
-                    r.date,\s
-                    t.id as time_id,\s
-                    t.start_at as time_value\s
-                FROM reservation as r\s
-                inner join reservation_time as t\s
+                SELECT
+                    r.id as reservation_id,
+                    r.name,
+                    r.date,
+                    t.id as time_id,
+                    t.start_at as time_value
+                FROM reservation as r
+                inner join reservation_time as t
                 on r.time_id = t.id
                 """;
 
@@ -45,14 +62,42 @@ public class ReservationRepository {
                             resultSet.getLong("time_id"),
                             LocalTime.parse(resultSet.getString("time_value"))
                     );
-                    Reservation reservation = new Reservation(
+                    return new Reservation(
                             resultSet.getLong("reservation_id"),
                             resultSet.getString("name"),
                             LocalDate.parse(resultSet.getString("date")),
                             time
                     );
-                    return reservation;
                 });
     }
-}
 
+    public Reservation findById(final long id) {
+        final String sql = """
+                SELECT
+                    r.id as reservation_id,
+                    r.name,
+                    r.date,
+                    t.id as time_id,
+                    t.start_at as time_value
+                FROM reservation as r
+                INNER JOIN reservation_time as t
+                ON r.time_id = t.id
+                WHERE r.id = ?
+                """;
+
+        return jdbcTemplate.queryForObject(
+                sql, (resultSet, rowNum) -> {
+                    ReservationTime time = new ReservationTime(
+                            resultSet.getLong("time_id"),
+                            LocalTime.parse(resultSet.getString("time_value"))
+                    );
+                    return new Reservation(
+                            resultSet.getLong("reservation_id"),
+                            resultSet.getString("name"),
+                            LocalDate.parse(resultSet.getString("date")),
+                            time
+                    );
+                },
+                id);
+    }
+}
