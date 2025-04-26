@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import roomescape.domain.reservationtime.ReservationTime;
 
 public record Reservation(
-        long id,
+        Long id,
         String name,
         LocalDate date,
         ReservationTime time
@@ -25,6 +25,6 @@ public record Reservation(
     }
 
     public Reservation(String name, LocalDate date, ReservationTime time) {
-        this(0L, name, date, time);
+        this(null, name, date, time);
     }
 }

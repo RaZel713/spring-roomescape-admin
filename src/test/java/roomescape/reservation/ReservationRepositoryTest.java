@@ -28,7 +28,7 @@ import roomescape.domain.reservationtime.ReservationTime;
 public class ReservationRepositoryTest {
 
     private static final ReservationTime TIME = new ReservationTime(1L, LocalTime.of(12, 0));
-    private static final long DUMMY_ID = 0L;
+    private static final Long DUMMY_ID = null;
 
     private ReservationRepository reservationRepository;
     private ReservationTimeRepository reservationTimeRepository;
