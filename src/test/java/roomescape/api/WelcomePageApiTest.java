@@ -1,4 +1,4 @@
-package roomescape;
+package roomescape.api;
 
 
 import io.restassured.RestAssured;
@@ -9,7 +9,7 @@ import org.springframework.test.annotation.DirtiesContext;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-public class WelcomeTest {
+public class WelcomePageApiTest {
 
     @DisplayName("/로 요청이 들어오면 웰컴 페이지를 응답한다.")
     @Test

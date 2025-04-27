@@ -1,4 +1,4 @@
-package roomescape.admin;
+package roomescape.api;
 
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.DisplayName;
@@ -9,7 +9,7 @@ import org.springframework.test.annotation.DirtiesContext;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-public class AdminApiTest {
+public class AdminPageApiTest {
 
     @DisplayName("일단계: 홈화면 - /admin으로 요청이 들어오면 어드민 페이지를 응답한다.")
     @Test
