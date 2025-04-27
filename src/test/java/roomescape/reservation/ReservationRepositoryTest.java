@@ -34,23 +34,21 @@ public class ReservationRepositoryTest {
     private ReservationTimeRepository reservationTimeRepository;
 
     @Autowired
-    private JdbcTemplate reservationJdbcTemplate;
-    @Autowired
-    private JdbcTemplate reservationTimeJdbcTemplate;
+    private JdbcTemplate jdbcTemplate;
 
     @BeforeEach
     void setUp() {
-        reservationRepository = new ReservationRepository(reservationJdbcTemplate);
-        reservationTimeRepository = new ReservationTimeRepository(reservationTimeJdbcTemplate);
+        reservationRepository = new ReservationRepository(jdbcTemplate);
+        reservationTimeRepository = new ReservationTimeRepository(jdbcTemplate);
 
-        reservationJdbcTemplate.execute("DROP TABLE IF EXISTS reservation");
-        reservationTimeJdbcTemplate.execute("DROP TABLE IF EXISTS reservation_time");
+        jdbcTemplate.execute("DROP TABLE IF EXISTS reservation");
+        jdbcTemplate.execute("DROP TABLE IF EXISTS reservation_time");
 
-        reservationTimeJdbcTemplate.execute("CREATE TABLE reservation_time ("
+        jdbcTemplate.execute("CREATE TABLE reservation_time ("
                 + "id BIGINT NOT NULL AUTO_INCREMENT,"
                 + "start_at VARCHAR(255) NOT NULL,"
                 + "PRIMARY KEY (id))");
-        reservationJdbcTemplate.execute("CREATE TABLE reservation ("
+        jdbcTemplate.execute("CREATE TABLE reservation ("
                 + "id BIGINT NOT NULL AUTO_INCREMENT,"
                 + "name VARCHAR(255) NOT NULL,"
                 + "date VARCHAR(255) NOT NULL,"
@@ -113,7 +111,7 @@ public class ReservationRepositoryTest {
     @DisplayName("오단계: 데이터 조회하기")
     @Test
     void step_five() {
-        reservationJdbcTemplate.update("INSERT INTO reservation (name, date, time_id) VALUES (?, ?, ?)",
+        jdbcTemplate.update("INSERT INTO reservation (name, date, time_id) VALUES (?, ?, ?)",
                 "브라운", LocalDate.parse("2023-08-05"), 1L);
 
         List<Reservation> reservations = RestAssured.given().log().all()
@@ -122,7 +120,7 @@ public class ReservationRepositoryTest {
                 .statusCode(200).extract()
                 .jsonPath().getList(".", Reservation.class);
 
-        Integer count = reservationJdbcTemplate.queryForObject("SELECT count(1) from reservation", Integer.class);
+        Integer count = jdbcTemplate.queryForObject("SELECT count(1) from reservation", Integer.class);
 
         assertThat(reservations.size()).isEqualTo(count);
     }
@@ -142,7 +140,7 @@ public class ReservationRepositoryTest {
                 .then().log().all()
                 .statusCode(200);
 
-        Integer count = reservationJdbcTemplate.queryForObject("SELECT count(1) from reservation", Integer.class);
+        Integer count = jdbcTemplate.queryForObject("SELECT count(1) from reservation", Integer.class);
         assertThat(count).isEqualTo(1);
 
         RestAssured.given().log().all()
@@ -150,7 +148,7 @@ public class ReservationRepositoryTest {
                 .then().log().all()
                 .statusCode(200);
 
-        Integer countAfterDelete = reservationJdbcTemplate.queryForObject("SELECT count(1) from reservation",
+        Integer countAfterDelete = jdbcTemplate.queryForObject("SELECT count(1) from reservation",
                 Integer.class);
         assertThat(countAfterDelete).isEqualTo(0);
     }
