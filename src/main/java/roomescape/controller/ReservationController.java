@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import roomescape.domain.reservation.CreateReservationRequest;
+import roomescape.DTO.CreateReservationRequest;
 import roomescape.domain.reservation.Reservation;
 import roomescape.service.ReservationService;
 
