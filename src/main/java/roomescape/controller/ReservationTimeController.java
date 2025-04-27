@@ -2,6 +2,7 @@ package roomescape.controller;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -27,8 +28,12 @@ public class ReservationTimeController {
     public ResponseEntity<ReservationTime> createTime(
             @RequestBody final ReservationTime reservationTime
     ) {
-        ReservationTime insertedReservationTime = reservationTimeService.createReservationTime(reservationTime);
-        return ResponseEntity.ok(insertedReservationTime);
+        try {
+            ReservationTime insertedReservationTime = reservationTimeService.createReservationTime(reservationTime);
+            return ResponseEntity.ok(insertedReservationTime);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
     }
 
     @GetMapping
