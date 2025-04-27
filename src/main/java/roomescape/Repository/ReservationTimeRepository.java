@@ -22,7 +22,7 @@ public class ReservationTimeRepository implements BaseRepository<ReservationTime
     }
 
     @Override
-    public synchronized ReservationTime insert(final ReservationTime reservationTime) {
+    public ReservationTime insert(final ReservationTime reservationTime) {
         final String sql = "INSERT INTO reservation_time (start_at) VALUES (?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
@@ -43,7 +43,7 @@ public class ReservationTimeRepository implements BaseRepository<ReservationTime
     }
 
     @Override
-    public synchronized List<ReservationTime> findAll() {
+    public List<ReservationTime> findAll() {
         final String sql = "SELECT id, start_at FROM reservation_time";
 
         return jdbcTemplate.query(sql, (resultSet, rowNum) -> mapRow(resultSet));
@@ -57,7 +57,7 @@ public class ReservationTimeRepository implements BaseRepository<ReservationTime
     }
 
     @Override
-    public synchronized int delete(final Long id) {
+    public int delete(final Long id) {
         final String sql = "DELETE FROM reservation_time where id = ?";
         return jdbcTemplate.update(sql, id);
     }
