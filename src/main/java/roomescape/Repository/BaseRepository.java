@@ -9,9 +9,9 @@ public interface BaseRepository<T> {
 
     Iterable<T> findAll();
 
-    T findById(Long id);
+    T findBy(Long id);
 
-    int delete(Long id);
+    int deleteBy(Long id);
 
     T mapRow(ResultSet resultSet) throws SQLException;
 }

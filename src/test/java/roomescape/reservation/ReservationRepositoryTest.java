@@ -63,7 +63,7 @@ public class ReservationRepositoryTest {
     @Test
     void insertReservationTest1() {
         // given
-        ReservationTime reservationTime = reservationTimeRepository.findById(1L);
+        ReservationTime reservationTime = reservationTimeRepository.findBy(1L);
         final Reservation reservation = new Reservation(DUMMY_ID, "검프",
                 LocalDate.of(2025, 4, 4), reservationTime);
 
@@ -78,7 +78,7 @@ public class ReservationRepositoryTest {
     @Test
     void insertReservationTest2() {
         // given
-        ReservationTime reservationTime = reservationTimeRepository.findById(1L);
+        ReservationTime reservationTime = reservationTimeRepository.findBy(1L);
         final Reservation reservation = new Reservation(DUMMY_ID, "검프",
                 LocalDate.of(2025, 4, 4), reservationTime);
 
@@ -91,21 +91,21 @@ public class ReservationRepositoryTest {
     @Test
     void removeReservationTest1() {
         // given
-        ReservationTime reservationTime = reservationTimeRepository.findById(1L);
+        ReservationTime reservationTime = reservationTimeRepository.findBy(1L);
         final Reservation reservation = new Reservation(DUMMY_ID, "검프",
                 LocalDate.of(2025, 4, 4), reservationTime);
 
         reservationRepository.insert(reservation);
 
         // then
-        assertThat(reservationRepository.delete(1L)).isEqualTo(1);
+        assertThat(reservationRepository.deleteBy(1L)).isEqualTo(1);
     }
 
     @DisplayName("존재하지 않는 아이디가 들어오면 예외가 발생한다.")
     @Test
     void removeReservationTest2() {
         // when & then
-        assertThat(reservationRepository.delete(1L)).isEqualTo(0);
+        assertThat(reservationRepository.deleteBy(1L)).isEqualTo(0);
     }
 
     @DisplayName("오단계: 데이터 조회하기")

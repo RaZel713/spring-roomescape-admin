@@ -33,7 +33,7 @@ public class ReservationTimeRepository implements BaseRepository<ReservationTime
         }, keyHolder);
 
         Long id = Objects.requireNonNull(keyHolder.getKey()).longValue();
-        return findById(id);
+        return findBy(id);
     }
 
     public boolean existsBy(LocalTime startAt) {
@@ -50,14 +50,14 @@ public class ReservationTimeRepository implements BaseRepository<ReservationTime
     }
 
     @Override
-    public ReservationTime findById(final Long id) {
+    public ReservationTime findBy(final Long id) {
         final String sql = "SELECT id, start_at FROM reservation_time WHERE id = ?";
         return jdbcTemplate.queryForObject(sql, (resultSet, rowNum) -> mapRow(resultSet), id
         );
     }
 
     @Override
-    public int delete(final Long id) {
+    public int deleteBy(final Long id) {
         final String sql = "DELETE FROM reservation_time where id = ?";
         return jdbcTemplate.update(sql, id);
     }

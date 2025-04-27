@@ -34,7 +34,7 @@ public class ReservationTimeService {
     }
 
     public void deleteReservationTime(final Long id) {
-        if (reservationTimeRepository.delete(id) == DELETE_NO_ROWS_AFFECTED) {
+        if (reservationTimeRepository.deleteBy(id) == DELETE_NO_ROWS_AFFECTED) {
             throw new NoSuchElementException("[ERROR] 해당 ID의 시간을 찾을 수 없습니다. id:" + id);
         }
     }

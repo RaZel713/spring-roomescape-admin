@@ -24,7 +24,7 @@ public class ReservationService {
     }
 
     public Reservation createReservation(final CreateReservationRequest request) {
-        final ReservationTime time = reservationTimeRepository.findById(request.timeId());
+        final ReservationTime time = reservationTimeRepository.findBy(request.timeId());
         final Reservation reservation = new Reservation(request.name(), request.date(), time);
         return reservationRepository.insert(reservation);
     }
@@ -34,7 +34,7 @@ public class ReservationService {
     }
 
     public void deleteReservation(final Long id) {
-        if (reservationRepository.delete(id) == DELETE_NO_ROWS_AFFECTED) {
+        if (reservationRepository.deleteBy(id) == DELETE_NO_ROWS_AFFECTED) {
             throw new NoSuchElementException("[ERROR] 해당 ID의 예약을 찾을 수 없습니다. id:" + id);
         }
     }
