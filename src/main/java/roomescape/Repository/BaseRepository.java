@@ -5,7 +5,7 @@ import java.sql.SQLException;
 
 public interface BaseRepository<T> {
 
-    T insert(T t);
+    Long insert(T t);
 
     Iterable<T> findAll();
 

@@ -26,7 +26,7 @@ public class ReservationRepository implements BaseRepository<Reservation> {
     }
 
     @Override
-    public Reservation insert(final Reservation reservation) {
+    public Long insert(final Reservation reservation) {
         final String sql = "INSERT INTO reservation (name, date, time_id) VALUES (?, ?, ?)";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -39,9 +39,7 @@ public class ReservationRepository implements BaseRepository<Reservation> {
             return ps;
         }, keyHolder);
 
-        Long id = Objects.requireNonNull(keyHolder.getKey()).longValue();
-
-        return findBy(id);
+        return Objects.requireNonNull(keyHolder.getKey()).longValue();
     }
 
     @Override

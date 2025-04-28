@@ -24,7 +24,7 @@ public class ReservationTimeRepository implements BaseRepository<ReservationTime
     }
 
     @Override
-    public ReservationTime insert(final ReservationTime reservationTime) {
+    public Long insert(final ReservationTime reservationTime) {
         final String sql = "INSERT INTO reservation_time (start_at) VALUES (?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
@@ -34,8 +34,7 @@ public class ReservationTimeRepository implements BaseRepository<ReservationTime
             return ps;
         }, keyHolder);
 
-        Long id = Objects.requireNonNull(keyHolder.getKey()).longValue();
-        return findBy(id);
+        return Objects.requireNonNull(keyHolder.getKey()).longValue();
     }
 
     public boolean existsBy(LocalTime startAt) {

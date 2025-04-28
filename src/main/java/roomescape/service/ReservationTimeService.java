@@ -20,7 +20,9 @@ public class ReservationTimeService {
             throw new IllegalArgumentException("[ERROR] 이미 존재하는 예약 시간이 있습니다.");
         }
 
-        return reservationTimeRepository.insert(reservationTime);
+        Long id = reservationTimeRepository.insert(reservationTime);
+
+        return reservationTimeRepository.findBy(id);
     }
 
     private boolean isReservationTimeExist(ReservationTime reservationTime) {
