@@ -12,6 +12,7 @@ import roomescape.dto.CreateReservationRequest;
 @Service
 public class ReservationService {
 
+    private static final String ERROR_SIGN = "[ERROR] ";
     private final ReservationRepository reservationRepository;
     private final ReservationTimeRepository reservationTimeRepository;
 
@@ -35,7 +36,7 @@ public class ReservationService {
 
     public void deleteBy(final Long id) {
         if (!reservationRepository.deleteBy(id)) {
-            throw new NoSuchElementException("[ERROR] 해당 ID의 예약을 찾을 수 없습니다. id:" + id);
+            throw new NoSuchElementException(ERROR_SIGN + "해당 ID의 예약을 찾을 수 없습니다. id:" + id);
         }
     }
 }
