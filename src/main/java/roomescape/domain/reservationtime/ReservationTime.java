@@ -1,5 +1,6 @@
 package roomescape.domain.reservationtime;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import java.time.LocalTime;
 import roomescape.dto.CreateReservationTimeRequest;
 
@@ -10,6 +11,7 @@ public class ReservationTime {
     private final Long id;
     private final LocalTime startAt;
 
+    @JsonCreator
     public ReservationTime(Long id, LocalTime startAt) {
         validate(startAt);
         this.id = id;
@@ -19,7 +21,7 @@ public class ReservationTime {
     public ReservationTime(CreateReservationTimeRequest request) {
         this(null, request.startAt());
     }
-    
+
     private void validate(LocalTime startAt) {
         if (startAt == null) {
             throw new IllegalArgumentException(ERROR_SIGN + "시간이 비어 있을 수 없습니다.");
