@@ -39,9 +39,9 @@ public class ReservationTimeRepository implements BaseRepository<ReservationTime
     }
 
     public boolean existsBy(LocalTime startAt) {
-        final String sql = "SELECT COUNT(*) FROM reservation_time WHERE start_at = ?";
-        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, startAt);
-        return count != null && count > 0;
+        final String sql = "SELECT EXISTS(SELECT 1 FROM reservation_time WHERE start_at = ?)";
+        Boolean exists = jdbcTemplate.queryForObject(sql, Boolean.class, startAt);
+        return Boolean.TRUE.equals(exists);
     }
 
     @Override
