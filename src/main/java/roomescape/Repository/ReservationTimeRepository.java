@@ -14,7 +14,7 @@ import org.springframework.stereotype.Repository;
 import roomescape.domain.reservationtime.ReservationTime;
 
 @Repository
-public class ReservationTimeRepository implements BaseRepository<ReservationTime> {
+public class ReservationTimeRepository {
 
     private static final int DELETE_NO_ROWS_AFFECTED = 0;
     private final JdbcTemplate jdbcTemplate;
@@ -23,14 +23,13 @@ public class ReservationTimeRepository implements BaseRepository<ReservationTime
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    @Override
-    public Long insert(final ReservationTime reservationTime) {
+    public Long insert(final ReservationTime time) {
         final String sql = "INSERT INTO reservation_time (start_at) VALUES (?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, new String[]{"id"});
-            ps.setString(1, reservationTime.startAt().toString());
+            ps.setString(1, time.getStartAt().toString());
             return ps;
         }, keyHolder);
 
@@ -43,14 +42,12 @@ public class ReservationTimeRepository implements BaseRepository<ReservationTime
         return Boolean.TRUE.equals(exists);
     }
 
-    @Override
     public List<ReservationTime> findAll() {
         final String sql = "SELECT id, start_at FROM reservation_time";
 
         return jdbcTemplate.query(sql, getReservationTimeRowMapper());
     }
 
-    @Override
     public ReservationTime findBy(final Long id) {
         final String sql = "SELECT id, start_at FROM reservation_time WHERE id = ?";
         return jdbcTemplate.queryForObject(sql, getReservationTimeRowMapper(), id);
@@ -60,13 +57,11 @@ public class ReservationTimeRepository implements BaseRepository<ReservationTime
         return (resultSet, rowNum) -> mapRow(resultSet);
     }
 
-    @Override
     public boolean deleteBy(final Long id) {
         final String sql = "DELETE FROM reservation_time where id = ?";
         return jdbcTemplate.update(sql, id) != DELETE_NO_ROWS_AFFECTED;
     }
 
-    @Override
     public ReservationTime mapRow(ResultSet resultSet) throws SQLException {
         return new ReservationTime(
                 resultSet.getLong("id"),

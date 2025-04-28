@@ -3,16 +3,28 @@ package roomescape.domain.reservation;
 import java.time.LocalDate;
 import roomescape.domain.reservationtime.ReservationTime;
 
-public record Reservation(
-        Long id,
-        String name,
-        LocalDate date,
-        ReservationTime time
-) {
+public class Reservation {
 
     private static final String ERROR_SIGN = "[ERROR] ";
 
-    public Reservation {
+    private final Long id;
+    private final String name;
+    private final LocalDate date;
+    private final ReservationTime time;
+
+    public Reservation(Long id, String name, LocalDate date, ReservationTime time) {
+        validate(name, date, time);
+        this.id = id;
+        this.name = name;
+        this.date = date;
+        this.time = time;
+    }
+
+    public Reservation(String name, LocalDate date, ReservationTime time) {
+        this(null, name, date, time);
+    }
+
+    private void validate(String name, LocalDate date, ReservationTime time) {
         if (name == null || name.isBlank()) {
             throw new IllegalArgumentException(ERROR_SIGN + "이름이 비어 있을 수 없습니다.");
         }
@@ -24,7 +36,19 @@ public record Reservation(
         }
     }
 
-    public Reservation(String name, LocalDate date, ReservationTime time) {
-        this(null, name, date, time);
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public ReservationTime getTime() {
+        return time;
     }
 }

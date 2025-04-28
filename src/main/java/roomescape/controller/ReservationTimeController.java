@@ -11,7 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import roomescape.domain.reservationtime.ReservationTime;
+import roomescape.dto.CreateReservationTimeRequest;
+import roomescape.dto.ReservationTimeResponse;
 import roomescape.service.ReservationTimeService;
 
 @RestController
@@ -25,11 +26,11 @@ public class ReservationTimeController {
     }
 
     @PostMapping
-    public ResponseEntity<ReservationTime> createTime(
-            @RequestBody final ReservationTime reservationTime
+    public ResponseEntity<ReservationTimeResponse> createTime(
+            @RequestBody final CreateReservationTimeRequest request
     ) {
         try {
-            ReservationTime insertedReservationTime = reservationTimeService.create(reservationTime);
+            ReservationTimeResponse insertedReservationTime = reservationTimeService.create(request);
             return ResponseEntity.ok(insertedReservationTime);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
@@ -37,7 +38,7 @@ public class ReservationTimeController {
     }
 
     @GetMapping
-    public List<ReservationTime> readAllTime() {
+    public List<ReservationTimeResponse> readAllTime() {
         return reservationTimeService.readAll();
     }
 

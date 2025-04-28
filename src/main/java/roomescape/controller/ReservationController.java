@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import roomescape.domain.reservation.Reservation;
 import roomescape.dto.CreateReservationRequest;
+import roomescape.dto.ReservationResponse;
 import roomescape.service.ReservationService;
 
 @RestController
@@ -25,14 +25,14 @@ public class ReservationController {
     }
 
     @PostMapping
-    public Reservation createReservation(
+    public ReservationResponse createReservation(
             @RequestBody final CreateReservationRequest request
     ) {
         return reservationService.create(request);
     }
 
     @GetMapping
-    public List<Reservation> readAllReservation() {
+    public List<ReservationResponse> readAllReservation() {
         return reservationService.readAll();
     }
 

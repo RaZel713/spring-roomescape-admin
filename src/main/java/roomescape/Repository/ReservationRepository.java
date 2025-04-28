@@ -16,7 +16,7 @@ import roomescape.domain.reservation.Reservation;
 import roomescape.domain.reservationtime.ReservationTime;
 
 @Repository
-public class ReservationRepository implements BaseRepository<Reservation> {
+public class ReservationRepository {
 
     private static final int DELETE_NO_ROWS_AFFECTED = 0;
     private final JdbcTemplate jdbcTemplate;
@@ -25,7 +25,6 @@ public class ReservationRepository implements BaseRepository<Reservation> {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    @Override
     public Long insert(final Reservation reservation) {
         final String sql = "INSERT INTO reservation (name, date, time_id) VALUES (?, ?, ?)";
 
@@ -33,16 +32,15 @@ public class ReservationRepository implements BaseRepository<Reservation> {
 
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, new String[]{"id"});
-            ps.setString(1, reservation.name());
-            ps.setString(2, String.valueOf(reservation.date()));
-            ps.setLong(3, reservation.time().id());
+            ps.setString(1, reservation.getName());
+            ps.setString(2, String.valueOf(reservation.getDate()));
+            ps.setLong(3, reservation.getTime().getId());
             return ps;
         }, keyHolder);
 
         return Objects.requireNonNull(keyHolder.getKey()).longValue();
     }
 
-    @Override
     public List<Reservation> findAll() {
         final String sql = """
                 SELECT
@@ -59,7 +57,6 @@ public class ReservationRepository implements BaseRepository<Reservation> {
         return jdbcTemplate.query(sql, getReservationRowMapper());
     }
 
-    @Override
     public Reservation findBy(final Long id) {
         final String sql = """
                 SELECT
@@ -81,13 +78,11 @@ public class ReservationRepository implements BaseRepository<Reservation> {
         return (resultSet, rowNum) -> mapRow(resultSet);
     }
 
-    @Override
     public boolean deleteBy(final Long id) {
         final String sql = "DELETE FROM reservation where id = ?";
         return jdbcTemplate.update(sql, id) != DELETE_NO_ROWS_AFFECTED;
     }
 
-    @Override
     public Reservation mapRow(ResultSet resultSet) throws SQLException {
         ReservationTime time = new ReservationTime(
                 resultSet.getLong("time_id"),

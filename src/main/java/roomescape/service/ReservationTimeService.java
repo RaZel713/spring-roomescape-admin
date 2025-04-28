@@ -5,6 +5,8 @@ import java.util.NoSuchElementException;
 import org.springframework.stereotype.Service;
 import roomescape.Repository.ReservationTimeRepository;
 import roomescape.domain.reservationtime.ReservationTime;
+import roomescape.dto.CreateReservationTimeRequest;
+import roomescape.dto.ReservationTimeResponse;
 
 @Service
 public class ReservationTimeService {
@@ -16,22 +18,28 @@ public class ReservationTimeService {
         this.reservationTimeRepository = reservationTimeRepository;
     }
 
-    public ReservationTime create(ReservationTime reservationTime) {
+    public ReservationTimeResponse create(CreateReservationTimeRequest request) {
+        ReservationTime reservationTime = new ReservationTime(request);
+
         if (isReservationTimeExist(reservationTime)) {
             throw new IllegalArgumentException(ERROR_SIGN + " 이미 존재하는 예약 시간이 있습니다.");
         }
 
         Long id = reservationTimeRepository.insert(reservationTime);
+        ReservationTime insertedReservationTime = reservationTimeRepository.findBy(id);
 
-        return reservationTimeRepository.findBy(id);
+        return ReservationTimeResponse.from(insertedReservationTime);
     }
 
-    private boolean isReservationTimeExist(ReservationTime reservationTime) {
-        return reservationTimeRepository.existsBy(reservationTime.startAt());
+    private boolean isReservationTimeExist(ReservationTime time) {
+        return reservationTimeRepository.existsBy(time.getStartAt());
     }
 
-    public List<ReservationTime> readAll() {
-        return reservationTimeRepository.findAll();
+    public List<ReservationTimeResponse> readAll() {
+        List<ReservationTime> reservationTimes = reservationTimeRepository.findAll();
+        return reservationTimes.stream()
+                .map(ReservationTimeResponse::from)
+                .toList();
     }
 
     public void deleteBy(final Long id) {
