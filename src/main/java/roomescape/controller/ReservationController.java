@@ -28,12 +28,12 @@ public class ReservationController {
     public Reservation createReservation(
             @RequestBody final CreateReservationRequest request
     ) {
-        return reservationService.createReservation(request);
+        return reservationService.create(request);
     }
 
     @GetMapping
     public List<Reservation> readAllReservation() {
-        return reservationService.readAllReservations();
+        return reservationService.readAll();
     }
 
     @DeleteMapping("/{id}")
@@ -41,7 +41,7 @@ public class ReservationController {
             @PathVariable("id") final Long id
     ) {
         try {
-            reservationService.deleteReservation(id);
+            reservationService.deleteBy(id);
             return ResponseEntity.ok().build();
         } catch (NoSuchElementException e) {
             return ResponseEntity.notFound().build();

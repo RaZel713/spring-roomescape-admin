@@ -29,7 +29,7 @@ public class ReservationTimeController {
             @RequestBody final ReservationTime reservationTime
     ) {
         try {
-            ReservationTime insertedReservationTime = reservationTimeService.createReservationTime(reservationTime);
+            ReservationTime insertedReservationTime = reservationTimeService.create(reservationTime);
             return ResponseEntity.ok(insertedReservationTime);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
@@ -38,7 +38,7 @@ public class ReservationTimeController {
 
     @GetMapping
     public List<ReservationTime> readAllTime() {
-        return reservationTimeService.getAllReservationTime();
+        return reservationTimeService.readAll();
     }
 
     @DeleteMapping("/{id}")
@@ -46,7 +46,7 @@ public class ReservationTimeController {
             @PathVariable("id") final Long id
     ) {
         try {
-            reservationTimeService.deleteReservationTime(id);
+            reservationTimeService.deleteBy(id);
             return ResponseEntity.ok().build();
         } catch (NoSuchElementException e) {
             return ResponseEntity.notFound().build();

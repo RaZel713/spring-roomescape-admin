@@ -17,7 +17,7 @@ public class ReservationTimeService {
         this.reservationTimeRepository = reservationTimeRepository;
     }
 
-    public ReservationTime createReservationTime(ReservationTime reservationTime) {
+    public ReservationTime create(ReservationTime reservationTime) {
         if (isReservationTimeExist(reservationTime)) {
             throw new IllegalArgumentException("[ERROR] 이미 존재하는 예약 시간이 있습니다.");
         }
@@ -29,11 +29,11 @@ public class ReservationTimeService {
         return reservationTimeRepository.existsBy(reservationTime.startAt());
     }
 
-    public List<ReservationTime> getAllReservationTime() {
+    public List<ReservationTime> readAll() {
         return reservationTimeRepository.findAll();
     }
 
-    public void deleteReservationTime(final Long id) {
+    public void deleteBy(final Long id) {
         if (reservationTimeRepository.deleteBy(id) == DELETE_NO_ROWS_AFFECTED) {
             throw new NoSuchElementException("[ERROR] 해당 ID의 시간을 찾을 수 없습니다. id:" + id);
         }
