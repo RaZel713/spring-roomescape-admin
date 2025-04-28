@@ -25,7 +25,7 @@ import roomescape.domain.reservationtime.ReservationTime;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-public class ReservationRepositoryTest {
+public class ReservationTest {
 
     private static final ReservationTime TIME = new ReservationTime(1L, LocalTime.of(12, 0));
     private static final Long DUMMY_ID = null;
