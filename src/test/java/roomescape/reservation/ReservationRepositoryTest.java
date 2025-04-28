@@ -98,14 +98,14 @@ public class ReservationRepositoryTest {
         reservationRepository.insert(reservation);
 
         // then
-        assertThat(reservationRepository.deleteBy(1L)).isEqualTo(1);
+        assertThat(reservationRepository.deleteBy(1L)).isTrue();
     }
 
-    @DisplayName("존재하지 않는 아이디가 들어오면 예외가 발생한다.")
+    @DisplayName("존재하지 않는 아이디가 들어오면 false를 반환한다.")
     @Test
     void removeReservationTest2() {
         // when & then
-        assertThat(reservationRepository.deleteBy(1L)).isEqualTo(0);
+        assertThat(reservationRepository.deleteBy(1L)).isFalse();
     }
 
     @DisplayName("오단계: 데이터 조회하기")

@@ -16,6 +16,7 @@ import roomescape.domain.reservationtime.ReservationTime;
 @Repository
 public class ReservationTimeRepository implements BaseRepository<ReservationTime> {
 
+    private static final int DELETE_NO_ROWS_AFFECTED = 0;
     private final JdbcTemplate jdbcTemplate;
 
     public ReservationTimeRepository(JdbcTemplate jdbcTemplate) {
@@ -61,9 +62,9 @@ public class ReservationTimeRepository implements BaseRepository<ReservationTime
     }
 
     @Override
-    public int deleteBy(final Long id) {
+    public boolean deleteBy(final Long id) {
         final String sql = "DELETE FROM reservation_time where id = ?";
-        return jdbcTemplate.update(sql, id);
+        return jdbcTemplate.update(sql, id) != DELETE_NO_ROWS_AFFECTED;
     }
 
     @Override

@@ -9,8 +9,6 @@ import roomescape.domain.reservationtime.ReservationTime;
 @Service
 public class ReservationTimeService {
 
-    private static final int DELETE_NO_ROWS_AFFECTED = 0;
-
     private final ReservationTimeRepository reservationTimeRepository;
 
     public ReservationTimeService(ReservationTimeRepository reservationTimeRepository) {
@@ -34,7 +32,7 @@ public class ReservationTimeService {
     }
 
     public void deleteBy(final Long id) {
-        if (reservationTimeRepository.deleteBy(id) == DELETE_NO_ROWS_AFFECTED) {
+        if (!reservationTimeRepository.deleteBy(id)) {
             throw new NoSuchElementException("[ERROR] 해당 ID의 시간을 찾을 수 없습니다. id:" + id);
         }
     }

@@ -12,8 +12,6 @@ import roomescape.dto.CreateReservationRequest;
 @Service
 public class ReservationService {
 
-    private static final int DELETE_NO_ROWS_AFFECTED = 0;
-
     private final ReservationRepository reservationRepository;
     private final ReservationTimeRepository reservationTimeRepository;
 
@@ -34,7 +32,7 @@ public class ReservationService {
     }
 
     public void deleteBy(final Long id) {
-        if (reservationRepository.deleteBy(id) == DELETE_NO_ROWS_AFFECTED) {
+        if (!reservationRepository.deleteBy(id)) {
             throw new NoSuchElementException("[ERROR] 해당 ID의 예약을 찾을 수 없습니다. id:" + id);
         }
     }

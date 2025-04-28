@@ -11,7 +11,7 @@ public interface BaseRepository<T> {
 
     T findBy(Long id);
 
-    int deleteBy(Long id);
+    boolean deleteBy(Long id);
 
     T mapRow(ResultSet resultSet) throws SQLException;
 }
