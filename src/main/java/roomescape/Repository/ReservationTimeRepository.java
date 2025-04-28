@@ -7,6 +7,7 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.Objects;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
@@ -46,14 +47,17 @@ public class ReservationTimeRepository implements BaseRepository<ReservationTime
     public List<ReservationTime> findAll() {
         final String sql = "SELECT id, start_at FROM reservation_time";
 
-        return jdbcTemplate.query(sql, (resultSet, rowNum) -> mapRow(resultSet));
+        return jdbcTemplate.query(sql, getReservationTimeRowMapper());
     }
 
     @Override
     public ReservationTime findBy(final Long id) {
         final String sql = "SELECT id, start_at FROM reservation_time WHERE id = ?";
-        return jdbcTemplate.queryForObject(sql, (resultSet, rowNum) -> mapRow(resultSet), id
-        );
+        return jdbcTemplate.queryForObject(sql, getReservationTimeRowMapper(), id);
+    }
+
+    private RowMapper<ReservationTime> getReservationTimeRowMapper() {
+        return (resultSet, rowNum) -> mapRow(resultSet);
     }
 
     @Override
