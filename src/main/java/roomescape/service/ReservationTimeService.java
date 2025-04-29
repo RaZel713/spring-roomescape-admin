@@ -4,9 +4,9 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import org.springframework.stereotype.Service;
 import roomescape.Repository.ReservationTimeRepository;
+import roomescape.controller.dto.response.ReservationTimeResponse;
 import roomescape.domain.reservationtime.ReservationTime;
-import roomescape.dto.ReservationTimeCreation;
-import roomescape.dto.ReservationTimeResponse;
+import roomescape.service.dto.ReservationTimeCreation;
 
 @Service
 public class ReservationTimeService {

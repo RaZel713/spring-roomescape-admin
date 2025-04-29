@@ -1,6 +1,7 @@
-package roomescape.dto;
+package roomescape.service.dto;
 
 import java.time.LocalDate;
+import roomescape.controller.dto.request.CreateReservationRequest;
 
 public record ReservationCreation(
         String name,
