@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import roomescape.dto.CreateReservationRequest;
+import roomescape.dto.ReservationCreation;
 import roomescape.dto.ReservationResponse;
 import roomescape.service.ReservationService;
 
@@ -28,7 +29,8 @@ public class ReservationController {
     public ReservationResponse createReservation(
             @RequestBody final CreateReservationRequest request
     ) {
-        return reservationService.create(request);
+        ReservationCreation creation = ReservationCreation.from(request);
+        return reservationService.create(creation);
     }
 
     @GetMapping

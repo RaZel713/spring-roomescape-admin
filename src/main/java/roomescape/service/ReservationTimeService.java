@@ -5,7 +5,7 @@ import java.util.NoSuchElementException;
 import org.springframework.stereotype.Service;
 import roomescape.Repository.ReservationTimeRepository;
 import roomescape.domain.reservationtime.ReservationTime;
-import roomescape.dto.CreateReservationTimeRequest;
+import roomescape.dto.ReservationTimeCreation;
 import roomescape.dto.ReservationTimeResponse;
 
 @Service
@@ -18,8 +18,8 @@ public class ReservationTimeService {
         this.reservationTimeRepository = reservationTimeRepository;
     }
 
-    public ReservationTimeResponse create(CreateReservationTimeRequest request) {
-        ReservationTime reservationTime = new ReservationTime(request);
+    public ReservationTimeResponse create(ReservationTimeCreation creation) {
+        ReservationTime reservationTime = new ReservationTime(creation.startAt());
 
         if (isReservationTimeExist(reservationTime)) {
             throw new IllegalArgumentException(ERROR_SIGN + " 이미 존재하는 예약 시간이 있습니다.");
