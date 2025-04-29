@@ -25,8 +25,7 @@ public class ReservationService {
 
     public ReservationResponse create(final ReservationCreation creation) {
         final ReservationTime time = reservationTimeRepository.findBy(creation.timeId());
-
-        final Reservation reservation = new Reservation(creation.name(), creation.date(), time);
+        final Reservation reservation = Reservation.from(creation, time);
 
         Long id = reservationRepository.insert(reservation);
         Reservation insertedReservation = reservationRepository.findBy(id);

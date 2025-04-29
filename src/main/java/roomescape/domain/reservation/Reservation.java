@@ -3,6 +3,7 @@ package roomescape.domain.reservation;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import java.time.LocalDate;
 import roomescape.domain.reservationtime.ReservationTime;
+import roomescape.service.dto.ReservationCreation;
 
 public class Reservation {
 
@@ -22,8 +23,8 @@ public class Reservation {
         this.time = time;
     }
 
-    public Reservation(String name, LocalDate date, ReservationTime time) {
-        this(null, name, date, time);
+    public static Reservation from(ReservationCreation creation, ReservationTime time) {
+        return new Reservation(null, creation.name(), creation.date(), time);
     }
 
     private void validate(String name, LocalDate date, ReservationTime time) {

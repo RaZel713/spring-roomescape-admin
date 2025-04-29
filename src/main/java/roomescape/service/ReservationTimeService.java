@@ -19,7 +19,7 @@ public class ReservationTimeService {
     }
 
     public ReservationTimeResponse create(ReservationTimeCreation creation) {
-        ReservationTime reservationTime = new ReservationTime(creation.startAt());
+        ReservationTime reservationTime = ReservationTime.from(creation);
 
         if (isReservationTimeExist(reservationTime)) {
             throw new IllegalArgumentException(ERROR_SIGN + " 이미 존재하는 예약 시간이 있습니다.");
