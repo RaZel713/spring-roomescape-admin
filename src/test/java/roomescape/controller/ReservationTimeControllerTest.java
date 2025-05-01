@@ -1,4 +1,4 @@
-package roomescape.api;
+package roomescape.controller;
 
 import static org.hamcrest.core.Is.is;
 
@@ -13,7 +13,7 @@ import org.springframework.test.annotation.DirtiesContext;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-public class ReservationTimeApiTest {
+public class ReservationTimeControllerTest {
 
     @DisplayName("칠단계: 시간 관리 기능")
     @Test
