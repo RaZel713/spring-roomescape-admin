@@ -21,14 +21,18 @@ public class ReservationTimeService {
     public ReservationTimeResponse create(ReservationTimeCreation creation) {
         ReservationTime reservationTime = ReservationTime.from(creation);
 
-        if (isReservationTimeExist(reservationTime)) {
-            throw new IllegalArgumentException(ERROR_SIGN + " 이미 존재하는 예약 시간이 있습니다.");
-        }
+        validateDuplicateExistedTime(reservationTime);
 
         Long id = reservationTimeRepository.insert(reservationTime);
         ReservationTime insertedReservationTime = reservationTimeRepository.findBy(id);
 
         return ReservationTimeResponse.from(insertedReservationTime);
+    }
+
+    private void validateDuplicateExistedTime(final ReservationTime reservationTime) {
+        if (isReservationTimeExist(reservationTime)) {
+            throw new IllegalArgumentException(ERROR_SIGN + " 이미 존재하는 예약 시간이 있습니다.");
+        }
     }
 
     private boolean isReservationTimeExist(ReservationTime time) {
